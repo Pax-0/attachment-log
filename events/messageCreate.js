@@ -14,7 +14,7 @@ async function handler(msg){
         for(const img of attachments){
             const embed = makeEmbed(msg, img);
             let imgBuffer = await getImageBuffer(img.url);
-            if(img.size <= 1024 * 1024 * 8 && (img.filename.endsWith('png') || img.filename.endsWith('jpg') || img.filename.endsWith('jpeg'))) await channel.createMessage({embed}, {file: imgBuffer, name: img.filename});
+            if(img.size <= 1024 * 1024 * 8 /*&& (img.filename.endsWith('png') || img.filename.endsWith('jpg') || img.filename.endsWith('jpeg'))*/) await channel.createMessage({embed}, {file: imgBuffer, name: img.filename});
         }
     }
 }
