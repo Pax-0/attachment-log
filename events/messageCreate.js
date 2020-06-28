@@ -12,9 +12,9 @@ async function handler(msg){
         let channel = msg.channel.guild.channels.get(settings.logChannel);
         if(!channel) return console.log('invalid log channel in db.');
         for(const img of attachments){
-            const embed = makeEmbed(msg);
+            const embed = makeEmbed(msg, img);
             let imgBuffer = await getImageBuffer(img.url);
-            if(img.size <= 1024 * 1024 * 8 && (img.filename.endsWith('png') )) await channel.createMessage({embed}, {file: imgBuffer, name: 'log.png'});
+            if(img.size <= 1024 * 1024 * 8 && (img.filename.endsWith('png') || img.filename.endsWith('jpg') || img.filename.endsWith('jpeg'))) await channel.createMessage({embed}, {file: imgBuffer, name: img.filename});
         }
     }
 }
@@ -27,16 +27,16 @@ async function getImageBuffer(url){
       });
       return data;
 }
-function makeEmbed(msg){
+function makeEmbed(msg, img){
     const embed = {
-        title: `${msg.author.username} Uploaded ${msg.attachments.length} ${msg.attachments.length > 1 ? 'attachtments.' : 'attachtment.'}`, // Title of the embed
+        title: `${msg.author.username} Uploaded ${msg.attachments.length} ${msg.attachments.length > 1 ? 'attachments.' : 'attachment.'}`, // Title of the embed
         author: { // Author property
             name: msg.author.username,
             icon_url: msg.author.avatarURL
         },
         color: 0x008000, // Color, either in hex (show), or a base-10 integer
         image: {
-            url: `attachment://log.png`
+            url: `attachment://${img.filename}`
         },
         fields: [ // Array of field objects
             {
