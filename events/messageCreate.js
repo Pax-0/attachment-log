@@ -12,14 +12,13 @@ async function handler(msg){
 	if(attachments.length && msg.channel.guild.id === settings.guild && settings.logEnabled && settings.logChannel){
 		let channel = msg.channel.guild.channels.get(settings.logChannel);
 		if(!channel) return console.log('invalid log channel in db.');
-		// if(attachment.size <= 1024 * 1024 * 8 /*&& (attachment.filename.endsWith('png') || attachment.filename.endsWith('jpg') || attachment.filename.endsWith('jpeg'))*/) await channel.createMessage({embed}, {file: imgBuffer, name: attachment.filename});
 		
 		let videoTypes = ['mp4', 'flv', 'avi', 'wmv', 'mov'];
 		let imageTypes = ['png', 'jpeg', 'jpg'];
 		let gifTypes = ['gif'];
 		for(const attachment of attachments){
+			if(attachment.size >= 1024 * 1024 * 8) continue;
 			
-			if(attachment.size >= 1024 * 1024 * 8) return;
 			let extension = attachment.filename.split('.')[1];
 			if( videoTypes.includes(extension) ){
 			//     ^^ common video types
@@ -27,31 +26,34 @@ async function handler(msg){
 				await download(attachment.url, attachment.filename); // <---- downloading it from discord
 				const path = Path.resolve(__dirname, '../downloads', attachment.filename);
 				let video = await fs.readFileSync(path); // <---- getting the file from storage
-				if(!video) return;
+				if(!video) continue;
                 
 				const embed = makeVideoEmbed(msg, attachment.filename);
 				await channel.createMessage({embed});
 				await channel.createMessage('', {file: video, name: attachment.filename});
 				// deleting the file.
-				return fs.unlinkSync(path);
+				await fs.unlinkSync(path);
+				continue;
 			}
 			if( imageTypes.includes(extension) ){							
 			// ^^ common video types, we can download it but thats redundant.
 				const embed = makeEmbed(msg, attachment, 'image');
 			
 				let imgBuffer = await getImageBuffer(attachment.url);
-				return channel.createMessage({embed}, {file: imgBuffer, name: attachment.filename});
+				await channel.createMessage({embed}, {file: imgBuffer, name: attachment.filename});
+				continue;
 			}
 			if(gifTypes.includes(extension)){
 				await download(attachment.url, attachment.filename); // <---- downloading it from discord
 				const path = Path.resolve(__dirname, '../downloads', attachment.filename);
 				let gif = await fs.readFileSync(path); // <---- getting the file from storage
-				if(!gif) return;
+				if(!gif) continue;
 				// console.log(video); // <--- file buffer here, works
 				const embed = makeEmbed(msg, attachment, 'gif');
 				await channel.createMessage({embed}, {file: gif, name: attachment.filename});
 				// deleting the file.
-				return fs.unlinkSync(path);
+				await fs.unlinkSync(path);
+				continue;
 			}
 		}
 	}
