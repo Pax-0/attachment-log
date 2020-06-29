@@ -1,7 +1,7 @@
-const bot = require('../index');
+
 
 async function handler(error){
-    return console.log(error);
+	return console.log(error);
 }
 module.exports = {
 	event: 'error',

@@ -1,13 +1,13 @@
 const fs = require('fs');
 const eris = require('eris');
 const Datastore = require('nedb-promises');
-const {token} = require('./config.json')
+const {token} = require('./config.json');
 
 const clientOptions = {
-    autoreconnect: true,
-    restMode: true,
-    ignoreBots: true,
-    ignoreSelf: true
+	autoreconnect: true,
+	restMode: true,
+	ignoreBots: true,
+	ignoreSelf: true
 };
 // db call here for prefix.
 const commandOptions = {
@@ -24,9 +24,10 @@ bot.on('ready', async () => { // When the bot is ready
 	console.log(`Logged is as ${bot.user.username}!`); // Log "Ready!"
 	await loadCommands('./commands');
 	await loadEvents('./events');
-    await loadDB(bot);
+	await loadDB(bot);
 	await checkDBSettings(bot);
-	await enSurePrefix()
+	await enSurePrefix();
+	await enSureDownloadsDirExists();
 	console.log('Ready!'); // Log "Ready!"
 	// let doc = await bot.db.settings.findOne({});
 	// console.log(doc.users.length)
@@ -82,7 +83,6 @@ async function loadDefaultDbSettings(bot){
 		logChannel: null,
 		setup: false,
 		logEnabled: false,
-		logChannel: null, 
 		prefix: null,
 		guild: null
 	}; // add the doc if it dosnt exist already.
@@ -99,7 +99,20 @@ async function enSurePrefix(){
 	const settings = await bot.db.settings.findOne({});
 	if(!settings) return;
 
-	if(settings.prefix && settings.guild) return bot.registerGuildPrefix(settings.guild, [settings.prefix, '@mention'])
+	if(settings.prefix && settings.guild) return bot.registerGuildPrefix(settings.guild, [settings.prefix, '@mention']);
+}
+function enSureDownloadsDirExists(){
+	fs.access('./downloads', fs.constants.F_OK, (err) => {
+		if(err){
+			fs.mkdir('./downloads', function(err) {
+				if (err) {
+					console.log(err);
+				} else {
+					console.log('Created empty downloads directory!'); // this directory is temporary, all files downloaded should be deleted after they are uploaded to discord.
+				}
+			});
+		}
+	});
 }
 bot.connect();
 
