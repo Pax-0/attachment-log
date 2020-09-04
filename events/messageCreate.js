@@ -19,7 +19,8 @@ async function handler(msg){
 		for(const attachment of attachments){
 			if(attachment.size >= 1024 * 1024 * 8) continue;
 			
-			let extension = attachment.filename.split('.')[1];
+			let primExt = attachment.filename.split('.');
+			let extension = primExt.slice(-1).pop();
 			if( videoTypes.includes(extension) ){
 			//     ^^ common video types
 			// we download the vieo fist from discord, save it, *upload it* <-- not yet then delete it, same idea for others.
