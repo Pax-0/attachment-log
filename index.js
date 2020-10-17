@@ -9,7 +9,6 @@ const clientOptions = {
 	ignoreBots: true,
 	ignoreSelf: true
 };
-// db call here for prefix.
 const commandOptions = {
 	description: 'a log for attatchments.',
 	name: 'attatchment-log',
@@ -28,9 +27,10 @@ bot.on('ready', async () => { // When the bot is ready
 	await checkDBSettings(bot);
 	await enSurePrefix();
 	await enSureDownloadsDirExists();
+	// await fetchMessages(bot);
 	console.log('Ready!'); // Log "Ready!"
-	// let doc = await bot.db.settings.findOne({});
-	// console.log(doc.users.length)
+	//let doc = await bot.db.settings.findOne({});
+	//console.log(doc, '  ');
 });
 
 async function loadDB(bot){
@@ -80,11 +80,27 @@ async function loadCommands(dir){
 async function loadDefaultDbSettings(bot){
 	// users is used to store user-song links, the other props are self-explanatory.
 	const doc = {
-		logChannel: null,
 		setup: false,
-		logEnabled: false,
 		prefix: null,
-		guild: null
+		guild: null,
+		managers: null,
+		modules: {
+			attatchmentLog: {
+				enabled: false,
+				channelID: null,
+				name: 'attatchmentLog',
+			},
+			welcome: {
+				enabled: false,
+				channelID: null,
+				name: 'welcome',
+			}
+		},
+		controlPanel: {
+			enabled: false,
+			channelID: null,
+			messages: [],
+		}
 	}; // add the doc if it dosnt exist already.
 	await bot.db.settings.insert(doc);
 	return;
@@ -101,6 +117,18 @@ async function enSurePrefix(){
 
 	if(settings.prefix && settings.guild) return bot.registerGuildPrefix(settings.guild, [settings.prefix, '@mention']);
 }
+/*
+async function fetchMessages(bot){
+	let settings = await bot.db.settings.findOne({});
+	if(settings && settings.controlPanel.enabled && settings.controlPanel.messages.length){
+		let channel = bot.getChannel(settings.controlPanel.channelID);
+		for(const msgID of settings.controlPanel.messages){
+			// eslint-disable-next-line no-unused-vars
+			let originalMessage = await channel.getMessage(msgID);
+		}
+	}
+}
+*/
 function enSureDownloadsDirExists(){
 	fs.access('./downloads', fs.constants.F_OK, (err) => {
 		if(err){
