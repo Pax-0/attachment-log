@@ -7,7 +7,8 @@ async function handler(msg){
 	if(msg.author.bot) return;
 	const settings = await bot.db.settings.findOne({});
 	if(!settings) return console.log('Unable to find bot settings.');
-
+	if(!settings.modules.attatchmentLog.enabled) return;
+	
 	let attachments = msg.attachments;
 	if(attachments.length && msg.channel.guild.id === settings.guild && settings.logEnabled && settings.logChannel){
 		let channel = msg.channel.guild.channels.get(settings.logChannel);

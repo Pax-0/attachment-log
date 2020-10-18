@@ -30,7 +30,7 @@ bot.on('ready', async () => { // When the bot is ready
 	// await fetchMessages(bot);
 	console.log('Ready!'); // Log "Ready!"
 	//let doc = await bot.db.settings.findOne({});
-	//console.log(doc, '  ');
+	//console.log(doc);
 });
 
 async function loadDB(bot){
@@ -94,6 +94,7 @@ async function loadDefaultDbSettings(bot){
 				enabled: false,
 				channelID: null,
 				name: 'welcome',
+				message: null,
 			}
 		},
 		controlPanel: {
