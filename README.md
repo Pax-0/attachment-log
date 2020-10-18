@@ -12,6 +12,7 @@ afterwards there should be a new folder, navigate to it using `cd attachment-log
 - Rename `config_example.json` to `config.json` and paste your discord bot token in the token variable.
 - Run `npm install` in the console.
 - Run the bot with `node index.js` *Or any other runtime you have installed.*
+- use the setup command.
 
 # Requirements:
 - NodeJS 8.0.0 or higher.
