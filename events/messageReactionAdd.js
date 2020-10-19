@@ -28,7 +28,7 @@ async function handler(msg, emoji, userID){
 		await bot.db.settings.update({}, { $set: { 'modules.attatchmentlog.enabled' : !state } }); 
 	}
 
-	const embed = makeEmbed(`The ${module.name} module is ${state ?  'disabled.' : 'enabled.'}`, `Last toggeled by: <@${userID}>`, bot.user.username, `${!state ?  '3066993' : '15158332'}`, channel.guild.iconURL);
+	const embed = makeEmbed(`The ${module.name} module is ${state ?  'disabled.' : 'enabled.'}`, `Last toggled by: <@${userID}>`, bot.user.username, `${!state ?  '3066993' : '15158332'}`, channel.guild.iconURL);
 	await originalMessage.edit({content: '', embed});
 	await originalMessage.removeReactions();
 	await originalMessage.addReaction('🔁');
