@@ -25,7 +25,7 @@ async function handler(msg, emoji, userID){
 	if(module.name === 'welcome'){
 		await bot.db.settings.update({}, { $set: { 'modules.welcome.enabled' : !state } }); 
 	}else{
-		await bot.db.settings.update({}, { $set: { 'modules.attatchmentLog.enabled' : !state } }); 
+		await bot.db.settings.update({}, { $set: { 'modules.attatchmentlog.enabled' : !state } }); 
 	}
 
 	const embed = makeEmbed(`The ${module.name} module is ${state ?  'disabled.' : 'enabled.'}`, `Last toggeled by: <@${userID}>`, bot.user.username, `${!state ?  '3066993' : '15158332'}`, channel.guild.iconURL);

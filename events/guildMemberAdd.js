@@ -16,16 +16,15 @@ async function handler(guild, member){
 
 // eslint-disable-next-line no-unused-vars
 function makeEmbed(guild, member, settings){
-	const customText = settings.modules.welcome.message ? settings.modules.welcome.message : 'Enjoy your stay!';
+	const customText = settings.modules.welcome.message ? settings.modules.welcome.message : 'Enjoy your stay,';
 	const embed = {
 		title:`Welcome to ${guild.name}`,
-		description:`${member.mention} ${customText}`,
+		description:`${customText} ${member.mention}! 💜`,
 		footer: {
-			icon_url: member.iconURL,
+			text: `${member.username}#${member.discriminator} | Membercount: ${guild.memberCount}`,
+			icon_url: member.avatarURL,
 		},
-		color:'3066993',
-		timestamp: new Date(),
-
+		color:'10655482',
 	};
 	return embed;
 }

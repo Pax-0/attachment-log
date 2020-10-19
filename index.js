@@ -85,10 +85,10 @@ async function loadDefaultDbSettings(bot){
 		guild: null,
 		managers: null,
 		modules: {
-			attatchmentLog: {
+			attatchmentlog: {
 				enabled: false,
 				channelID: null,
-				name: 'attatchmentLog',
+				name: 'attachmentlog',
 			},
 			welcome: {
 				enabled: false,
