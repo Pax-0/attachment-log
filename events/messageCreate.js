@@ -7,11 +7,10 @@ async function handler(msg){
 	if(msg.author.bot) return;
 	const settings = await bot.db.settings.findOne({});
 	if(!settings) return console.log('Unable to find bot settings.');
-	if(!settings.modules.attatchmentLog.enabled) return;
 	
 	let attachments = msg.attachments;
-	if(attachments.length && msg.channel.guild.id === settings.guild && settings.logEnabled && settings.logChannel){
-		let channel = msg.channel.guild.channels.get(settings.logChannel);
+	if(attachments.length && msg.channel.guild.id === settings.guild && settings.modules.attatchmentLog.enabled && settings.modules.attatchmentLog.channelID){
+		let channel = msg.channel.guild.channels.get(settings.modules.attatchmentLog.channelID);
 		if(!channel) return console.log('invalid log channel in db.');
 		
 		let videoTypes = ['mp4', 'flv', 'avi', 'wmv', 'mov'];
